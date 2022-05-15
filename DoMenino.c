@@ -1,44 +1,66 @@
-
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<conio.h>
 #include <string.h>
-#include <stdbool.h>
-#include <conio.h>
 #include <ctype.h>
 #include <locale.h>
-#ifndef MAX_BUF
-#define MAX_BUF 200
-#endif
+#include <stdlib.h>
 
+int validador(char var[100]){
 
-int main(int argc, char* argv[])
-{
-	FILE *f;
-	int n1=0;
-	int n2=0;
-	char filename[80];
-	char buf [MAX_BUF];  
-	char palavra;
-    int posicaoSinais = 0;
-	int posicaoLetraE = 0;
-	int posicaoPonto = 0;
-	bool valido = true;
-	bool acerto = false;
+  for(int i = 0; i < strlen(var); i++){
+  	
+  }
+  
+   
+}
 
-	printf("Indique nome do ficheiro:");
-	gets(filename);
+int main(int argc,char *argv[]){
+  setlocale(LC_ALL, "Portuguese");
+  FILE *arqIn;
+  FILE *arqOut;
+  char linha[100];
+  char *result;
+  
+  arqOut = fopen("saida.txt", "w");
+  arqIn  = fopen("entrada.txt", "r");
+  
+  if (arqIn == NULL)  
+  {
+     printf("Problemas ao abrir o arquivo de leitura\n");
+     exit(0);
+  }
+  
+  if (arqOut == NULL)  
+  {
+     printf("Problemas ao abrir o arquivo de gravacao\n");
+     exit(0);
+  }
 
-	f=fopen(filename,"r");
-	if (f==NULL) 
-	{
-		printf("Erro na abertura do ficheiro");
-		return 1;
-	}
-	while (! feof(f)) 
-	{
-		
-	}
-	fclose(f);
-	printf("\n\nO ficheiro tem %d linhas, das quais %d com \"printf\"\n",n1,n2);
-	return 0;
+  while (!feof(arqIn))
+  {
+      result = fgets(linha, 100, arqIn);  
+      if (result)
+	  {
+	  	
+	  	if(int(linha[strlen(linha)-1]) == 10 ){
+	  		linha[strlen(linha)-1]='\0';
+		}
+      	
+    	if(validador(linha) == 1){
+    		fprintf(arqOut, "%s S\n", linha);
+  				printf("\nId valido");
+		}else
+		{
+    		fprintf(arqOut, "%s N\n", linha);
+    		printf("\n Id - %s - invalido", linha);
+  			printf("\nId invalido");
+		}
+	  }
+  }
+  
+  printf("\nVerificar arquivo de saida");
+  fclose(arqIn);
+  fclose(arqOut);
+    
+  return 0;
 }
