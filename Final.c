@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <conio.h>
+#include <curses.h>
 #include <string.h>
 #include <ctype.h>
 #include <locale.h>
@@ -7,21 +7,21 @@
 #include <stdbool.h>
 
 #define VALID_CHARACTERS (const char[]) {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'E', '.', '+', '-'}
+
+char * validateAutomaton(char line[100]);
+bool isValidCharacter(char character);
 	
 int main(int argc, char* argv[]) {
-	
-
 	setlocale(LC_ALL, "Portuguese");
 	
 	FILE *inputFile;
 	FILE *outputFile;
-	char *buffer;
 
+	char *buffer;
 	char line[100];
 	
 	inputFile  = fopen("input.txt", "r");
 	outputFile = fopen("output.txt", "w");
-	
 	
 	if (inputFile == NULL) {
 		printf("Erro ao abrir o aqruivo de leitura.\n");
@@ -32,7 +32,6 @@ int main(int argc, char* argv[]) {
 		printf("Erro ao abrir o aqruivo de escrita.\n");
 		exit(0);
 	}
-
 
 	while (!feof(inputFile)) {
 		buffer = fgets(line, 100, inputFile);
@@ -48,41 +47,14 @@ int main(int argc, char* argv[]) {
 	 
 }
 
-bool isValidCharacter(char character) {
-	int i;
-	
-	for (i = 0; i < strlen(VALID_CHARACTERS); i++) {
-		if (character == VALID_CHARACTERS[i]) {
-			return true;
-		}
-	}
-	
-	return false;
-}
-
-
-int validateAutomaton(char line[100]) {
-	// deve começar com numero					v
-	// deve ter no maximo um .					v
-	// deve ter no maximo uma letra E			v
-	// depois do E deve ter [+, -, numero]		v
-	// antes do E deve ser um numero
-	
+char * validateAutomaton(char line[100]) {
 	int i;
 	int countDot = 0;
 	int countLetterE = 0;
 	int countMoreOrLess = 0;
 	
-	for (i = 0; i < strlen(line); i++) {
+	for (i = 0; i < strlen(line) - 1; i++) {
 		// Verifica se todos os caracteres são válidos
-		bool teste;
-		
-		teste = isValidCharacter(line[i]);
-		
-		printf("valor: %s\n", teste? "true":"false");
-		printf("char: %c\n", line[i]);
-		
-					
 		if (!isValidCharacter(line[i])) {
 			return "Inválido";	
 		} 
@@ -140,4 +112,16 @@ int validateAutomaton(char line[100]) {
 	}
 	
 	return "Válido";
+}
+
+bool isValidCharacter(char character) {
+	int i;
+	
+	for (i = 0; i < strlen(VALID_CHARACTERS); i++) {
+		if (character == VALID_CHARACTERS[i]) {
+			return true;
+		}
+	}
+	
+	return false;
 }
