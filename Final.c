@@ -57,7 +57,7 @@ char * validateAutomaton(char line[100]) {
 		// Verifica se todos os caracteres são válidos
 		if (!isValidCharacter(line[i])) {
 			return "Inválido";	
-		} 
+		}
 		
 		// Verifica se tem no máximo um "."
 		if (line[i] == '.') {
@@ -84,6 +84,10 @@ char * validateAutomaton(char line[100]) {
 			// Verifica se depois do "E" é numero ou "+" ou "-"
 			if (!(line[i + 1] == '+' || line[i + 1] == '-' || isdigit(line[i + 1]))) {
 				return "Inválido";
+			}
+			
+			if ((line[i + 1] == '+' || line[i + 1] == '-') && (!isdigit(line[i + 2]))) {
+			    return "Inválido";
 			}
 			
 			// Verifica se antes do "E" existem apenas números
