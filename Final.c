@@ -1,21 +1,27 @@
-#define VALID_CHARACTERS {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'E', '.', '+', '-'}
+#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+#include <ctype.h>
+#include <locale.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
+#define VALID_CHARACTERS (const char[]) {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'E', '.', '+', '-'}
+	
 int main(int argc, char* argv[]) {
-	// deve começar com numero
-	// deve ter no maximo um .
-	// deve ter no maximo uma letra E
-	// depois do E deve ter [+, -, numero]
-	// antes do E deve ser um numero
+	
 
 	setlocale(LC_ALL, "Portuguese");
+	
 	FILE *inputFile;
 	FILE *outputFile;
+	char *buffer;
 
 	char line[100];
-	char *buffer;
 	
 	inputFile  = fopen("input.txt", "r");
 	outputFile = fopen("output.txt", "w");
+	
 	
 	if (inputFile == NULL) {
 		printf("Erro ao abrir o aqruivo de leitura.\n");
@@ -27,194 +33,111 @@ int main(int argc, char* argv[]) {
 		exit(0);
 	}
 
+
 	while (!feof(inputFile)) {
 		buffer = fgets(line, 100, inputFile);
-
-		fprintf(outputFile, "%s N\n", line);
 		
-		// if (buffer) {
-		// 	if (int(line[strlen(line)-1]) == 10 ) {
-		// 		linha[strlen(linha)-1]='\0';
-		// 	}
-			
-		// 	if (validador(linha) == 1) {
-		// 		fprintf(arqOut, "%s S\n", linha);
-		// 			printf("\nId valido");
-		// 	} else
-		// 	{
-		// 		fprintf(arqOut, "%s N\n", linha);
-		// 		printf("\n Id - %s - invalido", linha);
-		// 		printf("\nId invalido");
-		// 	}
-		// }
+		fprintf(outputFile, "%s - %s\n", validateAutomaton(line), line);
 	}
-	
+
 	printf("\nVerificar arquivo de saida");
 	fclose(inputFile);
-	fclose(outputFile);
-		
+	fclose(outputFile);	
+				
 	return 0;
+	 
+}
 
-//   while (!feof(arq))
-//   {
-// 	// Lê uma linha (inclusive com o '\n')
-//       result = fgets(Linha, 100, arq);  // o 'fgets' lê até 99 caracteres ou até o '\n'
-//       if (result)  // Se foi possível ler
-// 	  printf("Linha %d : %s",i,Linha);
-//       i++;
-//   }
-//   fclose(arq);
-
-
-    // char palavra[];
-
-    // char[] alfabeto = { 'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-	// 			'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '*', '#', '$', '@', '!', '%', '_', ';', '(', ')', '<', '>', ':', ',',
-	// 			'}', '{' };
-
-    // char[] alfabeto_valido = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'E', '.', '+', '-' };
-
-    // int posicaoSinais = 0;
-	// int posicaoLetraE = 0;
-	// int posicaoPonto = 0;
-
-    // bool valido = true;
-    // bool acerto = false;
-
-    // while (!acerto) {
-    //     printf("Digite a palavra: ");
-    //     palavra = scanner.nextLine();
-    //     acerto = automato(palavra, alfabeto, alfabeto_valido, posicaoSinais, posicaoLetraE, posicaoPonto, valido);
-
-    // }
+bool isValidCharacter(char character) {
+	int i;
+	
+	for (i = 0; i < strlen(VALID_CHARACTERS); i++) {
+		if (character == VALID_CHARACTERS[i]) {
+			return true;
+		}
+	}
+	
+	return false;
 }
 
 
-
-
-
-// public class FINAL {
-
-//     p
-
-// 	public static void main(String[] args) {
-// 		//String palavra;
-
-// 		char[] alfabeto = { 'A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-// 				'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '*', '#', '$', '@', '!', '%', '_', ';', '(', ')', '<', '>', ':', ',',
-// 				'}', '{' };
-
-// 		char[] alfabeto_valido = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'E', '.', '+', '-' };
-
-// 		int posicaoSinais = 0;
-// 		int posicaoLetraE = 0;
-// 		int posicaoPonto = 0;
-
-// 		boolean valido = true;
-
-// 		@SuppressWarnings("resource")
-// 		Scanner scanner = new Scanner(System.in);
-// 		boolean acerto = false;
+int validateAutomaton(char line[100]) {
+	// deve começar com numero					v
+	// deve ter no maximo um .					v
+	// deve ter no maximo uma letra E			v
+	// depois do E deve ter [+, -, numero]		v
+	// antes do E deve ser um numero
+	
+	int i;
+	int countDot = 0;
+	int countLetterE = 0;
+	int countMoreOrLess = 0;
+	
+	for (i = 0; i < strlen(line); i++) {
+		// Verifica se todos os caracteres são válidos
+		bool teste;
 		
-// 		while (!acerto) {
-// 			System.out.print("Digite a palavra: ");
-// 			palavra = scanner.nextLine();
-// 			acerto = automato(palavra, alfabeto, alfabeto_valido, posicaoSinais, posicaoLetraE, posicaoPonto, valido);
-
-// 		}
-
-// 	}
-
-// 	public static boolean automato(String palavra, char[] alfabeto, char[] alfabeto_valido, int posicaoSinais,
-// 			int posicaoLetraE, int posicaoPonto, boolean valido) {
+		teste = isValidCharacter(line[i]);
 		
-// 		for (int i = 0; i < palavra.length(); i++) {
-// 			for (int j = 0; j < alfabeto_valido.length; j++) {
-// 				if (!(palavra.charAt(i) == alfabeto_valido[i]) && palavra.charAt(i) == ' ') { // Verifica se h� espa�os na palavra
-// 					valido = false;
-// 					break;
-// 				}
-// 			}
-// 		}
-
-// 		try {
-// 			if (Character.isDigit(palavra.charAt(0))) { // Verifica se s�o n�meros na primeira posicao da palavra
-				
-// 				for (int i = 0; i < palavra.length(); i++) {// Repeticao para percorrer a palavra
-// 					for (int y = 0; y < alfabeto.length; y++) {// repeticao para calcular cada letra da palavra com o
-// 																// alfabeto
-// 						if (palavra.charAt(i) == alfabeto[y] && Character.isLowerCase(palavra.charAt(i))) {// verifica se h� letras min�sculas
-// 							System.out.println("A palavra possui letras min�sculas");
-// 							valido = false;
-// 							break;
-// 						} else {
-// 							if (palavra.charAt(i) == '.') {
-// 								posicaoPonto = i;
-								
-// 								if (!Character.isDigit(palavra.charAt(i + 1)) || palavra.charAt(i + 1) == 'E') {// verifica se o caractere na posicao � uma letra e se o proximo caractere � a letra E
-// 									valido = false;
-// 									break;
-// 								}
-
-// 							}
-
-// 							if (palavra.charAt(i) == 'E') {// verifica se o caractere � a letra E
-// 								posicaoLetraE = i;
-
-// 								if ((palavra.charAt(i + 1) == '+' && Character.isDigit(palavra.charAt(i + 2))
-// 										|| ((palavra.charAt(i + 1) == '-' && Character.isDigit(palavra.charAt(i + 2)))
-// 												|| Character.isDigit(palavra.charAt(i + 1))))) {
-// 									posicaoSinais = i;
-// 									valido = true;
-// 								} else {
-// 									valido = false;
-// 									break;
-// 								}
-
-// 							}
-							
-// 							if (palavra.charAt(i) == '+' && palavra.charAt(i - 1) != 'E'  //valida se o caractere � '+' e o caractere anterior n�o � 'E' 
-// 									|| palavra.charAt(i) == '-' && palavra.charAt(i - 1) != 'E') {//valida se o caractere � '-' e o caractere anterior n�o � 'E' 
-// 								valido = false;
-// 								break;
-// 							}
-
-// 						}
-// 					}
-
-// 				}
-// 			} else {
-// 				valido = false;
-// 			}
-// 		} catch (Exception e) {
-// 			valido = false;
-// 		}
-
-// 		for (int i = posicaoPonto - 1; i >= 0; i--) { // verifica se possui mais de um '.' na palavra
-// 			if (palavra.charAt(i) == '.') {
-// 				valido = false;
-// 				break;
-// 			}
-// 		}
-// 		for (int i = posicaoLetraE - 1; i >= 0; i--) { // verifica se possui dois caracteres 'E'
-// 			if (palavra.charAt(i) == 'E') {
-// 				valido = false;
-// 				break;
-// 			}
-// 		}
-// 		for (int i = posicaoSinais - 1; i >= 0; i--) {
-// 			if (palavra.charAt(i) == '+' || palavra.charAt(i) == '-') { //verifica se na palavra contem sinal '+' e '-' repetido
-// 				valido = false;
-// 				break;
-// 			}
-// 		}
-// 		if (valido) {
-// 			System.out.println("Palavra V�lida");
-// 			return true;
-// 		} else {
-// 			System.out.println("Palavra Inv�lida");
-// 			return false;
-// 		}
-
-// 	}
-// }
+		printf("valor: %s\n", teste? "true":"false");
+		printf("char: %c\n", line[i]);
+		
+					
+		if (!isValidCharacter(line[i])) {
+			return "Inválido";	
+		} 
+		
+		// Verifica se tem no máximo um "."
+		if (line[i] == '.') {
+			countDot++;
+			
+			if (countDot > 1) {
+				return "Inválido";
+			}
+			
+			// Verifica se antes e depois do "." existem apenas números
+			if ((isdigit(line[i - 1]) <= 0 && line[i - 1] != 'E') || isdigit(line[i + 1]) <= 0) {
+				return "Inválido";
+			}
+		}
+		
+		// Verifica se tem no máximo um "E"
+		if (line[i] == 'E') {
+			countLetterE++;
+			
+			if (countLetterE > 1) {
+				return "Inválido";
+			}
+			
+			// Verifica se depois do "E" é numero ou "+" ou "-"
+			if (!(line[i + 1] == '+' || line[i + 1] == '-' || isdigit(line[i + 1]))) {
+				return "Inválido";
+			}
+			
+			// Verifica se antes do "E" existem apenas números
+			if (isdigit(line[i - 1]) <= 0) {
+				return "Inválido";
+			}
+		}
+		
+		// Verifica se o "+" ou "-" está depois do "E" e se existe apenas uma incidencia na entrada
+		if (line[i] == '+' || line[i] == '-') {
+			countMoreOrLess++;
+			
+			if (line[i - 1] != 'E') {
+				return "Inválido";
+			}
+			
+			if (countMoreOrLess > 1) {
+				return "Inválido";
+			}
+		}	
+	}
+	
+	// Verifica se começa com um número
+	if (isdigit(line[0]) <= 0) {
+		return "Inválido";
+	}
+	
+	return "Válido";
+}
